@@ -1,10 +1,24 @@
 import { Component } from '@angular/core';
+import { SocketService } from './services/socket.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'angular-socket-io';
+  message: string = '';
+  receivedMessage: string = '';
+
+  constructor(private socketService: SocketService) {}
+
+  ngOnInit(): void {
+    this.socketService.getMessages().subscribe((msg): void => {
+      this.receivedMessage = msg.response;
+    });
+  }
+
+  sendMessage(): void {
+    this.socketService.sendMessage(this.message);
+    this.message = '';
+  }
 }
